@@ -1,6 +1,8 @@
 package org.scaler.ecommerceuserservice.controllers.controlleradvice;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.scaler.ecommerceuserservice.dtos.ErrorResponseDTO;
+import org.scaler.ecommerceuserservice.exceptions.InvalidTokenException;
 import org.scaler.ecommerceuserservice.exceptions.UserAlreadyExistsException;
 import org.scaler.ecommerceuserservice.exceptions.UserNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -17,34 +19,47 @@ import static java.time.LocalDateTime.now;
 @ControllerAdvice
 public class GlobalControllerAdvice {
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponseDTO> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
+    public ResponseEntity<ErrorResponseDTO> handleUserAlreadyExistsException(UserAlreadyExistsException e, HttpServletRequest request) {
         ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
                 .errorMessage(e.getMessage())
                 .errorCode("400")
-                .endPoint("")
+                .endPoint(request.getRequestURI())
                 .timestamp(now())
                 .build();
         return ResponseEntity.badRequest().body(errorResponseDTO);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleUserNotFoundException(UserNotFoundException e) {
+    public ResponseEntity<ErrorResponseDTO> handleUserNotFoundException(UserNotFoundException e, HttpServletRequest request) {
         ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
                 .errorMessage(e.getMessage())
                 .errorCode("404")
                 .timestamp(now())
-                .endPoint("")
+                .endPoint(request.getRequestURI())
                 .build();
-        return ResponseEntity.badRequest().body(errorResponseDTO);
+        return ResponseEntity
+                .status(404)
+                .body(errorResponseDTO);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponseDTO> handleBadCredentialsException(BadCredentialsException e) {
+    public ResponseEntity<ErrorResponseDTO> handleBadCredentialsException(BadCredentialsException e, HttpServletRequest request) {
         ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
                 .errorMessage(e.getMessage())
                 .errorCode("401")
                 .timestamp(now())
-                .endPoint("")
+                .endPoint(request.getRequestURI())
+                .build();
+        return ResponseEntity.badRequest().body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidTokenException(InvalidTokenException e, HttpServletRequest request) {
+        ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
+                .errorMessage(e.getMessage())
+                .errorCode("401")
+                .timestamp(now())
+                .endPoint(request.getRequestURI())
                 .build();
         return ResponseEntity.badRequest().body(errorResponseDTO);
     }

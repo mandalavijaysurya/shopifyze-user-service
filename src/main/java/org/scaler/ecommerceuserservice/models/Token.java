@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -14,8 +15,8 @@ import java.time.LocalDateTime;
  * @author: Vijaysurya Mandala
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
  */
-@Entity
-@Builder
+@Entity(name = "tokens")
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

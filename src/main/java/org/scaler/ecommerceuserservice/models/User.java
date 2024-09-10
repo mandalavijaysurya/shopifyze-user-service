@@ -3,6 +3,7 @@ package org.scaler.ecommerceuserservice.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -10,9 +11,9 @@ import java.util.List;
  * @author: Vijaysurya Mandala
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
  */
-@Entity
+@Entity(name = "users")
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseModel {

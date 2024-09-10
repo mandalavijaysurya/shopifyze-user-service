@@ -1,6 +1,7 @@
 package org.scaler.ecommerceuserservice.services;
 
 import org.scaler.ecommerceuserservice.exceptions.UserAlreadyExistsException;
+import org.scaler.ecommerceuserservice.exceptions.UserNotFoundException;
 import org.scaler.ecommerceuserservice.models.Token;
 import org.scaler.ecommerceuserservice.models.User;
 
@@ -11,7 +12,7 @@ import org.scaler.ecommerceuserservice.models.User;
 public interface UserService {
 
     User signup(String name, String email, String password) throws UserAlreadyExistsException;
-    Token login(String name, String password);
+    Token login(String name, String password) throws UserNotFoundException;
     void logout(String token);
-    User validate(String token);
+    User validate(String token) throws UserNotFoundException;
 }

@@ -5,7 +5,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.IdGeneratorType;
 import org.scaler.ecommerceuserservice.annotations.UUIDV6Generator;
@@ -21,7 +23,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @MappedSuperclass
-public class BaseModel {
+@SuperBuilder
+@NoArgsConstructor
+public abstract class BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @UUIDV6Generator

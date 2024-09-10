@@ -8,7 +8,7 @@ import lombok.Setter;
  * @author: Vijaysurya Mandala
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
  */
-@Entity
+@Entity(name = "roles")
 @Getter
 @Setter
 public class Role extends BaseModel {
