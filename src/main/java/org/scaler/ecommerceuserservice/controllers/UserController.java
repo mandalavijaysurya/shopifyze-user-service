@@ -18,7 +18,7 @@ import static org.scaler.ecommerceuserservice.utils.UserServiceUtils.*;
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/auth")
 public class UserController {
     private final UserService userService;
 
@@ -47,7 +47,7 @@ public class UserController {
     public void logout(@RequestHeader("Authorization") String token){
         userService.logout(token);
     }
-    @GetMapping("/validate")
+    @PostMapping("/validate")
     public ResponseEntity<UserDTO> validate(@RequestHeader("Authorization") String token) throws UserNotFoundException {
         User user = userService.validate(token);
         return ResponseEntity.ok().body(convertUserToUserDTO(user));
