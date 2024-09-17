@@ -47,7 +47,7 @@ public class UserController {
     public void logout(@RequestHeader("Authorization") String token){
         userService.logout(token);
     }
-    @PostMapping("/validate")
+    @GetMapping("/validate")
     public ResponseEntity<UserDTO> validate(@RequestHeader("Authorization") String token) throws UserNotFoundException {
         User user = userService.validate(token);
         return ResponseEntity.ok().body(convertUserToUserDTO(user));
