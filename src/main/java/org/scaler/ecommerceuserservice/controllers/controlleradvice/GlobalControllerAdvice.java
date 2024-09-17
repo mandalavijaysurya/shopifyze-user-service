@@ -1,10 +1,9 @@
 package org.scaler.ecommerceuserservice.controllers.controlleradvice;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.scaler.ecommerceuserservice.dtos.ErrorResponseDTO;
-import org.scaler.ecommerceuserservice.exceptions.InvalidTokenException;
-import org.scaler.ecommerceuserservice.exceptions.UserAlreadyExistsException;
-import org.scaler.ecommerceuserservice.exceptions.UserNotFoundException;
+import org.scaler.ecommerceuserservice.exceptions.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -63,4 +62,37 @@ public class GlobalControllerAdvice {
                 .build();
         return ResponseEntity.badRequest().body(errorResponseDTO);
     }
+    @ExceptionHandler(RoleNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleRoleNotFoundException(RoleNotFoundException e, HttpServletRequest request) {
+        ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
+                .errorMessage(e.getMessage())
+                .errorCode("404")
+                .timestamp(now())
+                .endPoint(request.getRequestURI())
+                .build();
+        return ResponseEntity
+                .status(404)
+                .body(errorResponseDTO);
+    }
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ErrorResponseDTO> handleJwtException( JwtException e, HttpServletRequest request){
+        ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
+                .errorMessage(e.getMessage())
+                .errorCode("401")
+                .timestamp(now())
+                .endPoint(request.getRequestURI())
+                .build();
+        return ResponseEntity.badRequest().body(errorResponseDTO);
+    }
+    @ExceptionHandler(RoleAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDTO> handleRoleAlreadyExistsException(RoleAlreadyExistsException e, HttpServletRequest request){
+        ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
+                .errorMessage(e.getMessage())
+                .errorCode("400")
+                .timestamp(now())
+                .endPoint(request.getRequestURI())
+                .build();
+        return ResponseEntity.badRequest().body(errorResponseDTO);
+    }
+
 }

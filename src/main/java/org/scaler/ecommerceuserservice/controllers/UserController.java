@@ -6,6 +6,7 @@ import org.scaler.ecommerceuserservice.exceptions.UserNotFoundException;
 import org.scaler.ecommerceuserservice.models.Token;
 import org.scaler.ecommerceuserservice.models.User;
 import org.scaler.ecommerceuserservice.services.UserService;
+import org.scaler.ecommerceuserservice.utils.UserServiceUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,5 +52,12 @@ public class UserController {
     public ResponseEntity<UserDTO> validate(@RequestHeader("Authorization") String token) throws UserNotFoundException {
         User user = userService.validate(token);
         return ResponseEntity.ok().body(convertUserToUserDTO(user));
+    }
+    @PostMapping("/role")
+    public ResponseEntity<RoleResponseDTO> addRole(@RequestBody RoleRequestDTO roleRequestDTO) {
+        String roleName = roleRequestDTO.getName();
+        userService.addRole(roleName);
+        RoleResponseDTO roleResponseDTO = UserServiceUtils.convertRoleToRoleResponseDTO(roleName);
+        return ResponseEntity.status(HttpStatus.CREATED).body(roleResponseDTO);
     }
 }

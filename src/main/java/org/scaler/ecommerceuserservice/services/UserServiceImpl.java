@@ -2,13 +2,15 @@ package org.scaler.ecommerceuserservice.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.scaler.ecommerceuserservice.exceptions.InvalidTokenException;
+import org.scaler.ecommerceuserservice.exceptions.RoleAlreadyExistsException;
+import org.scaler.ecommerceuserservice.exceptions.RoleNotFoundException;
 import org.scaler.ecommerceuserservice.exceptions.UserAlreadyExistsException;
 import org.scaler.ecommerceuserservice.exceptions.UserNotFoundException;
+import org.scaler.ecommerceuserservice.models.Role;
 import org.scaler.ecommerceuserservice.models.Token;
 import org.scaler.ecommerceuserservice.models.User;
 import org.scaler.ecommerceuserservice.repositories.RoleRepository;
@@ -22,12 +24,8 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static java.sql.Timestamp.valueOf;
 import static java.time.LocalDateTime.now;
@@ -67,13 +65,19 @@ public class UserServiceImpl implements UserService{
     @Override
     public User signup(String name, String email, String password) throws UserAlreadyExistsException {
         Optional<User> userOptional = userRepository.findByEmail(email);
+        Optional<Role> roleOptional = roleRepository.findByName("USER");
         if(userOptional.isPresent()) {
             throw new UserAlreadyExistsException("User already exits with email: " + email);
         }
+        if(roleOptional.isEmpty()) {
+            throw new RoleNotFoundException("The required role is not present yet. Please contact support!");
+        }
+        Role role = roleOptional.get();
         LocalDateTime now = now();
         User user = User.builder()
                 .name(name)
                 .email(email)
+                .roles(List.of(role))
                 .password(passwordEncoder.encode(password))
                 .createdAt(now)
                 .updatedAt(now)
@@ -105,7 +109,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User validate(String tokenValue) throws UserNotFoundException {
+    public User validate(String tokenValue) throws JwtException {
         Jws<Claims> claimsJws = Jwts
                 .parser()
                 .verifyWith(key)
@@ -119,8 +123,20 @@ public class UserServiceImpl implements UserService{
                 .build();
     }
 
+    @Override
+    public Role addRole(String role){
+        Optional<Role> roleOptional = roleRepository.findByName(role);
+        if(roleOptional.isPresent()) {
+            throw new RoleAlreadyExistsException("Role already exits with name: " + role);
+        }
+        Role newRole = Role.builder()
+                .name(role)
+                .build();
+        return roleRepository.save(newRole);
+    }
+
     private Token createToken(User user) {
-        Map<String, String > claims = new HashMap<>();
+        Map<String, String> claims = new HashMap<>();
         claims.put("email", user.getEmail());
         claims.put("name", user.getName());
         LocalDateTime currentTime = now();

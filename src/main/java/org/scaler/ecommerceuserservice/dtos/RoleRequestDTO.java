@@ -1,19 +1,17 @@
 package org.scaler.ecommerceuserservice.dtos;
 
-import lombok.*;
-import java.util.*;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author: Vijaysurya Mandala
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
  */
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class LoginResponseDTO {
+public class RoleRequestDTO {
     private String name;
-    private String email;
-    private List<String> roles;
 }
