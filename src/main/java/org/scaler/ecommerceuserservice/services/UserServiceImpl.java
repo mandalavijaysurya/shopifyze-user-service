@@ -26,6 +26,7 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.sql.Timestamp.valueOf;
 import static java.time.LocalDateTime.now;
@@ -116,10 +117,12 @@ public class UserServiceImpl implements UserService{
                 .build()
                 .parseSignedClaims(tokenValue);
         String email = claimsJws.getPayload().get("email", String.class);
-        String name =claimsJws.getPayload().get("name", String.class);
+        String name = claimsJws.getPayload().get("name", String.class);
+        String roles = claimsJws.getPayload().get("roles", String.class);
         return User.builder()
                 .email(email)
                 .name(name)
+                .roles(Arrays.stream(roles.split(",")).map(Role::new).collect(Collectors.toList()))
                 .build();
     }
 
@@ -129,8 +132,11 @@ public class UserServiceImpl implements UserService{
         if(roleOptional.isPresent()) {
             throw new RoleAlreadyExistsException("Role already exits with name: " + role);
         }
+        LocalDateTime now = now();
         Role newRole = Role.builder()
                 .name(role)
+                .createdAt(now)
+                .updatedAt(now)
                 .build();
         return roleRepository.save(newRole);
     }
@@ -139,6 +145,7 @@ public class UserServiceImpl implements UserService{
         Map<String, String> claims = new HashMap<>();
         claims.put("email", user.getEmail());
         claims.put("name", user.getName());
+        claims.put("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.joining(",")));
         LocalDateTime currentTime = now();
         LocalDateTime expiryTime = currentTime.plusDays(6);
         LocalDateTime now = now();

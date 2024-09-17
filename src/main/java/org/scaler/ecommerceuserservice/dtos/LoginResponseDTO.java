@@ -15,5 +15,4 @@ import java.util.*;
 public class LoginResponseDTO {
     private String name;
     private String email;
-    private List<String> roles;
 }

@@ -30,19 +30,13 @@ public class UserServiceUtils {
                         getUser()
                         .getEmail()
                 )
-                .roles(token
-                        .getUser()
-                        .getRoles()
-                        .stream()
-                        .map(Role::getName)
-                        .collect(Collectors.toList())
-                )
                 .build();
     }
     public static UserDTO convertUserToUserDTO(User user) {
         return UserDTO.builder()
                 .email(user.getEmail())
                 .name(user.getName())
+                .roles(user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                 .build();
     }
     public static RoleResponseDTO convertRoleToRoleResponseDTO(String role) {

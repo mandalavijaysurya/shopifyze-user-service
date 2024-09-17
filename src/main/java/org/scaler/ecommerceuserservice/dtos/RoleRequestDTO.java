@@ -1,9 +1,7 @@
 package org.scaler.ecommerceuserservice.dtos;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * @author: Vijaysurya Mandala
@@ -12,6 +10,8 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class RoleRequestDTO {
     private String name;
 }
