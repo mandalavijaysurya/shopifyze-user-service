@@ -21,6 +21,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class UserServiceSecurityConfiguration {
 
+/*
     @Bean
     SecurityFilterChain getSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -30,5 +31,6 @@ public class UserServiceSecurityConfiguration {
                         .anyRequest().authenticated()
                 )
                 .build();
-    }
+    }V
+*/
 }
