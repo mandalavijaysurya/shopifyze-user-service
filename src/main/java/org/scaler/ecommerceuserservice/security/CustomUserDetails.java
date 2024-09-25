@@ -1,6 +1,10 @@
 package org.scaler.ecommerceuserservice.security;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.scaler.ecommerceuserservice.models.User;
+import org.scaler.ecommerceuserservice.security.services.CustomUserDetailsService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +18,8 @@ import java.util.stream.Collectors;
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
  */
 
+@JsonDeserialize
+@Setter
 public class CustomUserDetails implements UserDetails {
     private final String username;
     private final String password;
@@ -23,6 +29,15 @@ public class CustomUserDetails implements UserDetails {
     private final boolean credentialsNonExpired;
     private final boolean enabled;
 
+    public CustomUserDetails(){
+        this.username = null;
+        this.password = null;
+        this.authorities = null;
+        this.accountNonExpired = false;
+        this.accountNonLocked = false;
+        this.credentialsNonExpired = false;
+        this.enabled = false;
+    }
     public CustomUserDetails(User user){
         this.username = user.getEmail();
         this.password = user.getPassword();
