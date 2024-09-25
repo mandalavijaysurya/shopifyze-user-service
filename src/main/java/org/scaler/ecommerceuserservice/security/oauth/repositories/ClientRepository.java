@@ -11,7 +11,7 @@ import java.util.Optional;
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
  */
 
-@Repository
+//@Repository
 public interface ClientRepository extends JpaRepository<Client, String> {
     Optional<Client> findByClientId(String clientId);
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -15,6 +17,8 @@ import java.util.Objects;
 
 @Entity(name = "authorization_consent")
 @IdClass(AuthorizationConsent.AuthorizationConsentId.class)
+@Getter
+@Setter
 public class AuthorizationConsent {
     @Id
     private String registeredClientId;
