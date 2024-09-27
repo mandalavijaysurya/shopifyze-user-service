@@ -1,7 +1,6 @@
 package org.scaler.ecommerceuserservice.dtos;
 
 import lombok.*;
-import java.util.*;
 
 /**
  * @author: Vijaysurya Mandala

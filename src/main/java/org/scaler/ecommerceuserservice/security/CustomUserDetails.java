@@ -1,10 +1,8 @@
 package org.scaler.ecommerceuserservice.security;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.scaler.ecommerceuserservice.models.User;
-import org.scaler.ecommerceuserservice.security.services.CustomUserDetailsService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -8,10 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.IdGeneratorType;
 import org.scaler.ecommerceuserservice.annotations.UUIDV6Generator;
-import org.scaler.ecommerceuserservice.generators.SortedUUIDGenerator;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

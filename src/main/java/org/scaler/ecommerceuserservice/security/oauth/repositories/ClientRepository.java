@@ -2,7 +2,6 @@ package org.scaler.ecommerceuserservice.security.oauth.repositories;
 
 import org.scaler.ecommerceuserservice.security.oauth.models.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
