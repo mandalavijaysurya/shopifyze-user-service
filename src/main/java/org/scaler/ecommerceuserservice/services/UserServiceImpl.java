@@ -1,11 +1,13 @@
 package org.scaler.ecommerceuserservice.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import org.scaler.ecommerceuserservice.dtos.SendEmailDto;
 import org.scaler.ecommerceuserservice.exceptions.RoleAlreadyExistsException;
 import org.scaler.ecommerceuserservice.exceptions.RoleNotFoundException;
 import org.scaler.ecommerceuserservice.exceptions.UserAlreadyExistsException;
@@ -17,6 +19,7 @@ import org.scaler.ecommerceuserservice.repositories.RoleRepository;
 import org.scaler.ecommerceuserservice.repositories.TokenRepository;
 import org.scaler.ecommerceuserservice.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,6 +48,9 @@ public class UserServiceImpl implements UserService{
     private SecretKey key;
     @Value("${jwt.secret}")
     private String secret;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ObjectMapper objectMapper;
+
 
     @PostConstruct
     public void checkEnv() {
@@ -55,12 +61,16 @@ public class UserServiceImpl implements UserService{
             UserRepository userRepository,
             TokenRepository tokenRepository,
             RoleRepository roleRepository,
-            BCryptPasswordEncoder bCryptPasswordEncoder
+            BCryptPasswordEncoder bCryptPasswordEncoder,
+            KafkaTemplate<String, String> template,
+            ObjectMapper objectMapper
     ) {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = bCryptPasswordEncoder;
+        this.kafkaTemplate = template;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -83,6 +93,22 @@ public class UserServiceImpl implements UserService{
                 .createdAt(now)
                 .updatedAt(now)
                 .build();
+
+        SendEmailDto sendEmailDto = SendEmailDto.builder()
+                .toEmail("ravalimanda44@gmail.com")
+                .fromEmail("mandala.vijay.surya@gmail.com")
+                .body("Hello!!!!")
+                .subject("Hello from email service")
+                .build();
+
+        String sendEmailDtoString = null;
+        try{
+            sendEmailDtoString = objectMapper.writeValueAsString(sendEmailDto);
+        }catch (Exception ex){
+            System.out.println("Something went wrong while converting SendEmailDto to String");
+        }
+        kafkaTemplate.send("email", sendEmailDtoString);
+
         return userRepository.save(user);
     }
 

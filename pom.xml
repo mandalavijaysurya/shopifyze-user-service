@@ -116,6 +116,15 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Kafka Dependencies -->
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>3.2.4</version>
+        </dependency>
+
+
         <!-- Test related dependencies -->
 
         <dependency>
